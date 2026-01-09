@@ -1,0 +1,23 @@
+idf_component_register(
+  SRCS
+      "src/main.c"
+      "src/led_rgb.c"
+      "src/wifi_ap.c"
+      "src/udp_server.c"
+      "src/user_uart.c"
+      "src/user_log_setup.c"
+      "src/spi_link.c"
+  INCLUDE_DIRS "include"
+  REQUIRES
+    nvs_flash
+    esp_event
+    esp_wifi
+    esp_netif
+    lwip
+    led_strip
+    esp_driver_spi           
+    esp_driver_gpio
+    esp_timer  
+    esp_driver_uart     
+    esp_vfs_console 
+)
