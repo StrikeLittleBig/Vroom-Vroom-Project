@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VROOM VROOM PROJECT</title>
+  <style>
+    :root{
+      --bg:#000;
+      --bg-grad-a:#000; --bg-grad-b:#05080f;
+      --card:#0a0a0f; --card-2:#0b0e1a;
+      --neon:#00e5ff; --neon-2:#39ff14; --danger:#ff4d6d;
+      --text:#eaf6ff; --muted:#8aa6bf;
+      --radius:16px; --border:1px solid rgba(0,229,255,.18);
+      --glow-soft:0 0 18px rgba(57,255,20,.15);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; padding:24px; color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:
+        radial-gradient(1200px 800px at 10% -10%, rgba(0,229,255,.06), transparent 40%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(255,43,214,.06), transparent 40%),
+        linear-gradient(180deg, var(--bg-grad-a), var(--bg-grad-b) 45% 55%, var(--bg-grad-a));
+    }
+    h1{
+      margin:0 0 18px; text-align:center; letter-spacing:.12em; font-weight:900;
+      color:#cfffff; text-transform:uppercase; font-size:clamp(20px,3.2vw,34px);
+      text-shadow:0 0 6px rgba(0,229,255,.6),0 0 18px rgba(0,229,255,.2);
+    }
+    .app{max-width:1400px; margin:0 auto; display:grid; grid-template-rows:auto 1fr auto; gap:18px}
+    .top-grid{display:grid; grid-template-columns:1fr; gap:16px}
+    .card{
+      background:linear-gradient(180deg, rgba(0,229,255,.06), rgba(57,255,20,.03) 30%, transparent), var(--card);
+      border:var(--border); border-radius:var(--radius);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), var(--glow-soft);
+      overflow:clip; display:flex; flex-direction:column;
+    }
+    .card-header{
+      padding:12px 14px; font-weight:800; letter-spacing:.08em; color:#b9fffb;
+      border-bottom:1px solid rgba(0,229,255,.18);
+      background:linear-gradient(180deg, rgba(0,229,255,.08), rgba(0,229,255,.02));
+      text-shadow:0 0 6px rgba(0,229,255,.35);
+    }
+    .card-body{padding:12px; flex:1; display:flex; gap:12px}
+    .control-stream{display:grid; grid-template-columns:1.2fr 1fr; gap:12px; width:100%}
+    .stick-panel,.buttons-panel{background:var(--card-2); border:var(--border); border-radius:12px; padding:12px; display:grid; gap:10px; box-shadow:var(--glow-soft)}
+    .panel-title{font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.14em}
+    .sticks{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .stick{position:relative; height:180px;
+      background:radial-gradient(160px 160px at 50% 50%, rgba(0,229,255,.08), rgba(0,229,255,0));
+      border-radius:12px; border:1px solid rgba(0,229,255,.12); box-shadow:inset 0 0 22px rgba(0,229,255,.08)}
+    .stick canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+    .triggers{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    .trigger{background:linear-gradient(180deg, rgba(0,229,255,.05), rgba(0,229,255,.02));
+      border:1px solid rgba(0,229,255,.12); border-radius:10px; padding:8px; box-shadow:inset 0 0 12px rgba(0,229,255,.06)}
+    .bar{height:10px; background:rgba(255,255,255,.06); border-radius:999px; overflow:hidden; border:1px solid rgba(0,229,255,.12)}
+    .bar>span{display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--neon), var(--neon-2)); box-shadow:0 0 12px rgba(0,229,255,.6); transition:width .08s linear}
+    .buttons-grid{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:10px}
+    .btn{display:grid; place-items:center; border-radius:12px; border:1px solid rgba(0,229,255,.12);
+      padding:10px; background:rgba(0,229,255,.03); position:relative; transition:transform .04s ease, box-shadow .2s ease, background .2s ease}
+    .btn:hover{transform:translateY(-1px); box-shadow:0 0 10px rgba(0,229,255,.18)}
+    .btn.active{box-shadow:0 0 0 2px rgba(0,229,255,.55), inset 0 0 18px rgba(0,229,255,.35); background:rgba(0,229,255,.22)}
+    .btn svg{width:28px; height:28px; filter:drop-shadow(0 2px 10px rgba(0,229,255,.25))}
+    .btn-label{font-size:11px; color:var(--muted); position:absolute; bottom:6px; right:8px; letter-spacing:.08em}
+    .bottom-grid{display:grid; grid-template-columns:1fr 380px; gap:16px}
+    .panel{
+      background:linear-gradient(180deg, rgba(0,229,255,.06), rgba(57,255,20,.03) 30%, transparent), var(--card);
+      border:var(--border); border-radius:var(--radius); box-shadow:inset 0 0 0 1px rgba(255,255,255,.02), var(--glow-soft);
+      overflow:clip; display:grid; grid-template-rows:auto 1fr;
+    }
+    .panel-header{padding:12px 14px; font-weight:800; border-bottom:1px solid rgba(0,229,255,.18);
+      background:linear-gradient(180deg, rgba(0,229,255,.08), rgba(0,229,255,.02)); letter-spacing:.08em; color:#b9fffb; text-shadow:0 0 6px rgba(0,229,255,.35)}
+    .panel-body{padding:12px; display:grid; gap:10px; align-content:start}
+    .console-wrap{display:grid; grid-template-rows:auto 1fr; gap:10px; width:100%}
+    .console{
+      background:#04060c; border:1px solid rgba(0,229,255,.12); border-radius:12px; padding:10px; overflow:auto;
+      min-height:180px; max-height:260px; font-family:ui-monospace, Menlo, Consolas, "Courier New", monospace; font-size:12.5px; line-height:1.5;
+      box-shadow:inset 0 0 18px rgba(0,229,255,.06)
+    }
+    .console .line{white-space:pre-wrap; color:#eaffff; text-shadow:0 0 6px rgba(0,229,255,.35)}
+    .console .line .ts{color:var(--neon)}
+    .btn-xl{display:inline-flex; align-items:center; justify-content:center; gap:10px; padding:12px 16px; border-radius:12px;
+      border:1px solid rgba(0,229,255,.18); font-weight:800; cursor:pointer; background:linear-gradient(180deg, rgba(0,229,255,.06), rgba(0,229,255,.02));
+      color:#eaffff; text-shadow:0 0 6px rgba(0,229,255,.2); box-shadow:var(--glow-soft)}
+    .btn-xl:hover{filter:brightness(1.08); box-shadow:0 0 18px rgba(0,229,255,.18)}
+    .btn-xl:active{transform:translateY(1px)}
+    .btn-start{outline:2px solid var(--neon-2); box-shadow:0 0 12px rgba(57,255,20,.25)}
+    .btn-stop{outline:2px solid var(--danger); box-shadow:0 0 12px rgba(255,77,109,.25)}
+    .status-row{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:14px}
+    .status-dot{width:10px; height:10px; border-radius:50%; background:#555; box-shadow:0 0 0 2px rgba(0,229,255,.1) inset, 0 0 12px rgba(0,229,255,.15)}
+    .dot-running{background:var(--neon-2); box-shadow:0 0 12px rgba(57,255,20,.6)}
+    .dot-stopped{background:var(--danger); box-shadow:0 0 12px rgba(255,77,109,.5)}
+    @media (max-width:1100px){.top-grid,.bottom-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>VROOM VROOM PROJECT</h1>
+    <section class="top-grid">
+      <article class="card">
+        <div class="card-header">Control Stream</div>
+        <div class="card-body">
+          <div class="control-stream">
+            <div class="stick-panel">
+              <div class="panel-title">Joysticks</div>
+              <div class="sticks">
+                <div class="stick"><canvas id="stickLeft"></canvas></div>
+                <div class="stick"><canvas id="stickRight"></canvas></div>
+              </div>
+              <div class="triggers">
+                <div class="trigger">
+                  <div class="panel-title">LT</div>
+                  <div class="bar"><span id="ltBar"></span></div>
+                </div>
+                <div class="trigger">
+                  <div class="panel-title">RT</div>
+                  <div class="bar"><span id="rtBar"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="buttons-panel">
+              <div class="panel-title">Buttons</div>
+              <div class="buttons-grid" id="buttonsGrid"></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+    <section class="bottom-grid">
+      <article class="panel">
+        <div class="panel-header">Log Console</div>
+        <div class="panel-body">
+          <div class="console-wrap">
+            <div class="status-row">
+              <span>UDP: <strong id="udpStatus">disconnected</strong></span>
+              <span class="status-dot dot-stopped" id="appDot"></span>
+            </div>
+            <div class="console" id="logConsole" aria-live="polite"></div>
+          </div>
+        </div>
+      </article>
+      <article class="panel">
+        <div class="panel-header">Control Panel</div>
+        <div class="panel-body">
+          <button class="btn-xl btn-start" id="btnStart" type="button">Start App</button>
+          <button class="btn-xl btn-stop" id="btnStop" type="button">Stop App</button>
+          <div class="status-row"><span>App status:</span> <strong id="appStatus">Stopped</strong></div>
+          <div class="status-row"><span>Controller:</span> <strong id="ctlStatus">Not connected</strong></div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+(() => {
+  window.CONFIG = window.CONFIG || {
+    buttonMapping: {
+      "A": 0, "B": 1, "X": 2, "Y": 3, "LB": 4, "RB": 5,
+      "Share": 6, "Select": 7, "LS": 8, "RS": 9, "Xbox": 10
+    },
+    triggerRange: [-1, 1],
+    axisRange: [-1, 1],
+    version: "2.0"
+  };
+
+  function ts(){ return new Date().toLocaleTimeString(); }
+  function log(msg){
+    const el = document.getElementById('logConsole'); 
+    if(!el) return;
+    const line = document.createElement('div'); 
+    line.className='line';
+    line.innerHTML = `<span class="ts">[${ts()}]</span> ${msg}`;
+    el.appendChild(line); 
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function getTriggerNormalizationFactor() {
+    const range = window.CONFIG.triggerRange || [-1, 1];
+    if (range[0] === -1 && range[1] === 1) {
+      return (value) => (value + 1) / 2;
+    } else if (range[0] === 0 && range[1] === 1023) {
+      return (value) => value / 1023;
+    } else {
+      return (value) => (value - range[0]) / (range[1] - range[0]);
+    }
+  }
+  const normalizeTrigger = getTriggerNormalizationFactor();
+
+  const UI = {
+    setUDPStatus(text){ 
+      const n = document.getElementById('udpStatus'); 
+      if(n) n.textContent = text; 
+    },
+    setControllerConnected(connected){
+      const isOn = (connected === true || connected === 1 || connected === 'true' || connected === '1');
+      const n = document.getElementById('ctlStatus');
+      if (n) n.textContent = isOn ? 'Connected' : 'Not connected';
+    },
+    setAppState(running){
+      const s = document.getElementById('appStatus');
+      const d = document.getElementById('appDot');
+      if(s) s.textContent = running ? 'Running' : 'Stopped';
+      if(d) d.className = 'status-dot ' + (running ? 'dot-running' : 'dot-stopped');
+    },
+    appendLog(message){ 
+      log(message); 
+    },
+    updateControlState(state){
+      if(!state) return;
+      const mapping = window.CONFIG.buttonMapping;
+      for (const [buttonName, bitPosition] of Object.entries(mapping)) {
+        const el = document.querySelector(`.btn[data-key="${buttonName}"]`);
+        if (!el) continue;
+        const active = (state.buttons & (1 << bitPosition)) !== 0;
+        el.classList.toggle("active", active);
+      }
+      const dpadButtons = ["DUp", "DRight", "DDown", "DLeft"];
+      for (let i = 0; i < 4; i++) {
+        const el = document.querySelector(`.btn[data-key="${dpadButtons[i]}"]`);
+        if (!el) continue;
+        el.classList.toggle("active", state.dpad === i);
+      }
+      drawStick("stickLeft", state.lx || 0, state.ly || 0);
+      drawStick("stickRight", state.rx || 0, state.ry || 0);
+      setBar("ltBar", normalizeTrigger(state.lt || window.CONFIG.triggerRange[0]));
+      setBar("rtBar", normalizeTrigger(state.rt || window.CONFIG.triggerRange[0]));
+    },
+    updateConfig(newConfig) {
+      window.CONFIG = {...window.CONFIG, ...newConfig};
+      log(`Configuration updated: v${window.CONFIG.version}`);
+      if (newConfig.buttonMapping) {
+        renderButtons();
+      }
+    }
+  };
+  window.UI = UI;
+
+  function drawStick(canvasId, x, y){
+    const canvas = document.getElementById(canvasId); 
+    if(!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(1, Math.round(rect.width));
+    const h = Math.max(1, Math.round(rect.height));
+    canvas.width = Math.max(1, Math.floor(w * dpr)); 
+    canvas.height = Math.max(1, Math.floor(h * dpr));
+    const ctx = canvas.getContext('2d'); 
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); 
+    ctx.clearRect(0, 0, w, h);
+    const cx = w / 2;
+    const cy = h / 2; 
+    const radius = Math.min(w, h) / 2 - 12;
+    ctx.strokeStyle = 'rgba(255,255,255,.25)'; 
+    ctx.lineWidth = 2; 
+    ctx.beginPath(); 
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2); 
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.08)'; 
+    ctx.beginPath(); 
+    ctx.moveTo(cx - radius, cy); 
+    ctx.lineTo(cx + radius, cy); 
+    ctx.stroke(); 
+    ctx.beginPath(); 
+    ctx.moveTo(cx, cy - radius); 
+    ctx.lineTo(cx, cy + radius); 
+    ctx.stroke();
+    const px = cx + (x || 0) * radius;
+    const py = cy + (-(y || 0)) * radius;
+    const grad = ctx.createRadialGradient(px, py, 0, px, py, 22); 
+    grad.addColorStop(0, 'rgba(0,229,255,.5)'); 
+    grad.addColorStop(1, 'rgba(0,229,255,0)');
+    ctx.fillStyle = grad; 
+    ctx.beginPath(); 
+    ctx.arc(px, py, 22, 0, Math.PI * 2); 
+    ctx.fill();
+    ctx.fillStyle = '#00e5ff'; 
+    ctx.beginPath(); 
+    ctx.arc(px, py, 6, 0, Math.PI * 2); 
+    ctx.fill();
+  }
+
+  function setBar(barId, normalizedValue){
+    const el = document.getElementById(barId); 
+    if(!el) return;
+    const value = Math.max(0, Math.min(1, normalizedValue || 0)); 
+    el.style.width = (value * 100).toFixed(1) + '%';
+  }
+
+  function iconCircle(color, letter){
+    return `
+      <svg viewBox="0 0 48 48" aria-hidden="true">
+        <defs>
+          <radialGradient id="g${letter}" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="${color}" stop-opacity="0.95"/>
+            <stop offset="100%" stop-color="${color}" stop-opacity="0.35"/>
+          </radialGradient>
+        </defs>
+        <circle cx="24" cy="24" r="20" fill="url(#g${letter})" stroke="rgba(255,255,255,.25)"/>
+        <text x="24" y="28" text-anchor="middle" font-size="18" font-weight="800" fill="#0b1220">${letter}</text>
+      </svg>`;
+  }
+
+  function renderButtons(){
+    const BUTTON_CONFIGS = [
+      {key:'Y', label:'Y', color:'#ffd166'},
+      {key:'X', label:'X', color:'#60a5fa'},
+      {key:'B', label:'B', color:'#f87171'},
+      {key:'A', label:'A', color:'#34d399'},
+      {key:'LB', label:'LB', color:'#9ca3af'},
+      {key:'RB', label:'RB', color:'#9ca3af'},
+      {key:'Share', label:'Share', color:'#9ca3af'},
+      {key:'Select', label:'Select', color:'#9ca3af'},
+      {key:'Xbox', label:'Xbox', color:'#f59e0b'},
+      {key:'LS', label:'LS', color:'#93c5fd'},
+      {key:'RS', label:'RS', color:'#93c5fd'},
+      {key:'DUp', label:'D↑', color:'#c4b5fd'},
+      {key:'DDown', label:'D↓', color:'#c4b5fd'},
+      {key:'DLeft', label:'D←', color:'#c4b5fd'},
+      {key:'DRight', label:'D→', color:'#c4b5fd'}
+    ];
+    const grid = document.getElementById('buttonsGrid'); 
+    if(!grid) return;
+    grid.innerHTML = ''; 
+    BUTTON_CONFIGS.forEach(buttonConfig => {
+      const div = document.createElement('div'); 
+      div.className = 'btn'; 
+      div.dataset.key = buttonConfig.key;
+      div.innerHTML = iconCircle(buttonConfig.color, buttonConfig.label) +
+                     `<span class="btn-label">${buttonConfig.key}</span>`;
+      grid.appendChild(div);
+    });
+  }
+
+  function bindBridge(){
+    if (window.qt && qt.webChannelTransport && typeof QWebChannel !== 'undefined') {
+      new QWebChannel(qt.webChannelTransport, function (channel) {
+        window.bridge = channel.objects.bridge;
+        log('Bridge ready');
+      });
+    } else {
+      log('Bridge not available');
+    }
+  }
+
+  function wireControls(){
+    const startBtn = document.getElementById('btnStart');
+    const stopBtn = document.getElementById('btnStop');
+    if(startBtn) {
+      startBtn.addEventListener('click', () => {
+        log('Start requested');
+        if (window.bridge && typeof window.bridge.start_app === 'function') {
+          window.bridge.start_app();
+        } else {
+          log('Bridge not ready - start request ignored');
+        }
+      });
+    }
+    if(stopBtn) {
+      stopBtn.addEventListener('click', () => {
+        log('Stop requested');
+        if (window.bridge && typeof window.bridge.stop_app === 'function') {
+          window.bridge.stop_app();
+        } else {
+          log('Bridge not ready - stop request ignored');
+        }
+      });
+    }
+  }
+
+  function init(){
+    log(`UI initialized - Config version: ${window.CONFIG.version}`);
+    renderButtons();
+    drawStick('stickLeft', 0, 0);
+    drawStick('stickRight', 0, 0);
+    setBar('ltBar', 0); 
+    setBar('rtBar', 0);
+    UI.setAppState(false);
+    bindBridge();
+    wireControls();
+  }
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, {once: true}); 
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
