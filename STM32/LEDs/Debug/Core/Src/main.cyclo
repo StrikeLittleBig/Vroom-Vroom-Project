@@ -1,0 +1,10 @@
+../Core/Src/main.c:64:13:byte_to_pwm	3
+../Core/Src/main.c:71:6:np_set_pixel	2
+../Core/Src/main.c:79:6:np_clear	1
+../Core/Src/main.c:84:6:np_show	4
+../Core/Src/main.c:106:5:main	2
+../Core/Src/main.c:164:6:SystemClock_Config	4
+../Core/Src/main.c:203:13:MX_TIM1_Init	7
+../Core/Src/main.c:252:13:MX_DMA_Init	1
+../Core/Src/main.c:262:13:MX_GPIO_Init	1
+../Core/Src/main.c:283:6:Error_Handler	1

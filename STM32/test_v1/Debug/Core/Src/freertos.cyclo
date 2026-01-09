@@ -1,0 +1,16 @@
+../Core/Src/freertos.c:92:13:byte_to_pwm	3
+../Core/Src/freertos.c:99:6:np_set_pixel	2
+../Core/Src/freertos.c:106:6:np_set_all_leds	2
+../Core/Src/freertos.c:112:6:np_clear	1
+../Core/Src/freertos.c:117:6:np_show	4
+../Core/Src/freertos.c:144:6:np_set_pixel_circle	2
+../Core/Src/freertos.c:153:6:np_set_all_leds_circle	2
+../Core/Src/freertos.c:160:6:np_clear_circle	1
+../Core/Src/freertos.c:165:6:np_show_circle	4
+../Core/Src/freertos.c:196:6:vApplicationGetIdleTaskMemory	1
+../Core/Src/freertos.c:226:6:app_init	1
+../Core/Src/freertos.c:272:6:task2	1
+../Core/Src/freertos.c:287:6:task3	1
+../Core/Src/freertos.c:303:6:task5	1
+../Core/Src/freertos.c:334:6:LED_ON	5
+../Core/Src/freertos.c:362:6:CircleLED_ON	1

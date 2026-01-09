@@ -1,0 +1,13 @@
+../Core/Src/freertos.c:54:24:read_u32_le	1
+../Core/Src/freertos.c:55:24:read_f32_le	1
+../Core/Src/freertos.c:57:13:decode_gamepad_frame	1
+../Core/Src/freertos.c:87:19:clamp_i	3
+../Core/Src/freertos.c:91:13:fmt_f2	4
+../Core/Src/freertos.c:102:13:LogPwmSetupOnce	1
+../Core/Src/freertos.c:122:6:MX_FREERTOS_Init	2
+../Core/Src/freertos.c:166:13:StartDefaultTask	2
+../Core/Src/freertos.c:195:6:StartDirTask	5
+../Core/Src/freertos.c:230:6:StartSpdTask	5
+../Core/Src/freertos.c:268:6:vApplicationGetIdleTaskMemory	1
+../Core/Src/freertos.c:291:6:vApplicationMallocFailedHook	1
+../Core/Src/freertos.c:298:6:vApplicationStackOverflowHook	1

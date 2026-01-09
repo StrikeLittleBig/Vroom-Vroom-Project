@@ -1,0 +1,13 @@
+../Core/Src/freertos.c:54:24:read_u32_le	24	static
+../Core/Src/freertos.c:55:24:read_f32_le	24	static
+../Core/Src/freertos.c:57:13:decode_gamepad_frame	24	static
+../Core/Src/freertos.c:87:19:clamp_i	24	static
+../Core/Src/freertos.c:91:13:fmt_f2	48	static
+../Core/Src/freertos.c:102:13:LogPwmSetupOnce	296	static
+../Core/Src/freertos.c:122:6:MX_FREERTOS_Init	248	static,ignoring_inline_asm
+../Core/Src/freertos.c:166:13:StartDefaultTask	232	static
+../Core/Src/freertos.c:195:6:StartDirTask	88	static
+../Core/Src/freertos.c:230:6:StartSpdTask	96	static
+../Core/Src/freertos.c:268:6:vApplicationGetIdleTaskMemory	24	static
+../Core/Src/freertos.c:291:6:vApplicationMallocFailedHook	16	static,ignoring_inline_asm
+../Core/Src/freertos.c:298:6:vApplicationStackOverflowHook	88	static,ignoring_inline_asm

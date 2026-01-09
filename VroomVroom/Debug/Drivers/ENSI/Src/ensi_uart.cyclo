@@ -1,0 +1,7 @@
+../Drivers/ENSI/Src/ensi_uart.c:105:6:ENSI_UART_Init	1
+../Drivers/ENSI/Src/ensi_uart.c:169:6:ENSI_UART_PutChar	2
+../Drivers/ENSI/Src/ensi_uart.c:176:6:ENSI_UART_PutString	2
+../Drivers/ENSI/Src/ensi_uart.c:184:6:ENSI_UART_GetChar	3
+../Drivers/ENSI/Src/ensi_uart.c:211:6:ENSI_UART_GetString	2
+../Drivers/ENSI/Src/ensi_uart.c:230:6:USART2_IRQHandler	1
+../Drivers/ENSI/Src/ensi_uart.c:239:13:ENSI_UART_IRQHandler	4
