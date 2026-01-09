@@ -1,5 +1,8 @@
 # VroomVroomProject
 
+Projet académique réalisé à l’ENSICAEN.
+Dépôt publié à des fins de présentation de compétences techniques.
+
 Projet embarqué pour piloter une voiture téléguidée via une architecture mixte **STM32 + ESP32** sous **FreeRTOS**.
 
 Chaîne de commande complète :  
